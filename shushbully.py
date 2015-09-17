@@ -5,11 +5,23 @@ import sys
 import csv
 from time import sleep
 
-whitelist = [
+#credentials from ghost account
+GHOST_CONSUMER_KEY = ''
+GHOST_CONSUMER_SECRET = ''
+GHOST_ACCESS_TOKEN_KEY = ''
+GHOST_ACCESS_TOKEN_SECRET = ''
+
+#credentials from actual account
+CONSUMER_KEY = ''
+CONSUMER_SECRET = ''
+ACCESS_TOKEN_KEY = ''
+ACCESS_TOKEN_SECRET = ''
+
+WHITELIST = [
     'orvtech',
 ]
 
-shitlist = [
+SHITLIST = [
     'amaia_roja',
     'anat5',
     'carollafra',
@@ -31,29 +43,15 @@ shitlist = [
     'PatriciaDorta40',
 ]
 
-
-
-#credentials from ghost account
-consumer_key=''
-consumer_secret=''
-access_token_key=''
-access_token_secret=''
-
-
-#credentials from actual account
-consumer_key2=''
-consumer_secret2=''
-access_token_key2=''
-access_token_secret2=''
-
-
+BLOCK_URL = 'https://api.twitter.com/1.1/blocks/create.json'
+MUTE_URL = 'https://api.twitter.com/1.1/mutes/users/create.json'
 
 def get_retweets(tweetid):
   retweetdata={}
   handles=[]
   api_url="https://api.twitter.com/1.1/statuses/retweets/"+tweetid+".json"
   payload = {'count':'100'}
-  auth = OAuth1(consumer_key, consumer_secret, access_token_key, access_token_secret)
+  auth = OAuth1(GHOST_CONSUMER_KEY, GHOST_CONSUMER_SECRET, GHOST_ACCESS_TOKEN_KEY, GHOST_ACCESS_TOKEN_SECRET)
   r = requests.get(api_url, stream=False, auth=auth, params=payload)
   try:
     if r.headers['x-rate-limit-remaining'] and r.headers['x-rate-limit-remaining'] == "0":
@@ -69,19 +67,13 @@ def get_retweets(tweetid):
     handles.append(retweetsObj[y]['user']['screen_name'])
   return handles
 
-
-
-BLOCK_URL = 'https://api.twitter.com/1.1/blocks/create.json'
-MUTE_URL = 'https://api.twitter.com/1.1/mutes/users/create.json'
-
 def getTweets(usuarios):
    api_url="https://api.twitter.com/1.1/statuses/user_timeline.json"
    payload = {'screen_name': usuarios, 'count':'1', 'trim_user':'t', 'include_rts':'false'}
-   auth = OAuth1(consumer_key, consumer_secret, access_token_key, access_token_secret)
+   auth = OAuth1(GHOST_CONSUMER_KEY, GHOST_CONSUMER_SECRET, GHOST_ACCESS_TOKEN_KEY, GHOST_ACCESS_TOKEN_SECRET)
    r = requests.get(api_url, stream=False, auth=auth, params=payload)
    statusObj = json.loads(r.content)
    return statusObj[0]['id']
-
 
 def act_on_handle(api_url, auth, payload):
     try:
@@ -97,18 +89,16 @@ def act_on_handle(api_url, auth, payload):
     except:
        pass
 
-
-
 def main():
-    for cuenta in shitlist:
+    for cuenta in SHITLIST:
        try:
          tweet = str(getTweets(cuenta))
          print "\nAnalizyng retweeters of" , cuenta , "TweetID:", tweet
          print "https://twitter.com/" + cuenta + "/status/" + tweet
          HANDLES = get_retweets(tweet)
          for user in HANDLES:
-            if user not in whitelist:
-              auth2 = OAuth1(consumer_key2, consumer_secret2, access_token_key2, access_token_secret2)
+            if user not in WHITELIST:
+              auth2 = OAuth1(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
               payload = "screen_name=" + user
               #act_on_handle(BLOCK_URL, auth2, payload)
               act_on_handle(MUTE_URL, auth2, payload)
