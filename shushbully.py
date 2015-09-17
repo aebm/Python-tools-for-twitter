@@ -2,7 +2,6 @@ import json
 import requests
 from requests_oauthlib import OAuth1
 import sys
-import csv
 from time import sleep
 
 # credentials from ghost account
@@ -48,7 +47,6 @@ MUTE_URL = 'https://api.twitter.com/1.1/mutes/users/create.json'
 
 
 def get_retweets(tweetid):
-    retweetdata = {}
     handles = []
     api_url = "https://api.twitter.com/1.1/statuses/retweets/"+tweetid+".json"
     payload = {'count': '100'}
@@ -85,7 +83,6 @@ def getTweets(usuarios):
 def act_on_handle(api_url, auth, payload):
     try:
         r = requests.post(api_url, stream=False, auth=auth, params=payload)
-        msgs = json.loads(r.content)
         print r.headers['status'], payload
         if (r.headers['x-rate-limit-remaining'] and
                 r.headers['x-rate-limit-remaining'] == "0"):
