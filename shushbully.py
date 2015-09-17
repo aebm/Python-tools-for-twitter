@@ -46,9 +46,9 @@ BLOCK_URL = 'https://api.twitter.com/1.1/blocks/create.json'
 MUTE_URL = 'https://api.twitter.com/1.1/mutes/users/create.json'
 
 
-def get_retweets(tweetid):
-    handles = []
-    api_url = "https://api.twitter.com/1.1/statuses/retweets/"+tweetid+".json"
+def retweeters(tweet_id):
+    api_url = ("https://api.twitter.com/1.1/statuses/retweets/"
+               "{tweet_id}.json").format(tweet_id=tweet_id)
     payload = {'count': '100'}
     auth = OAuth1(GHOST_CONSUMER_KEY, GHOST_CONSUMER_SECRET,
                   GHOST_ACCESS_TOKEN_KEY, GHOST_ACCESS_TOKEN_SECRET)
@@ -64,9 +64,7 @@ def get_retweets(tweetid):
     except:
         print("OK")
     retweetsObj = json.loads(r.content)
-    for y in range(len(retweetsObj)):
-        handles.append(retweetsObj[y]['user']['screen_name'])
-    return handles
+    return (elem['user']['screen_name'] for elem in retweetsObj)
 
 
 def last_tweet_id(user):
@@ -105,8 +103,7 @@ def main():
                   user=shit_user, tweet_id=tweet_id))
             print("https://twitter.com/{user}/status/{tweet_id}".format(
                   user=shit_user, tweet_id=tweet_id))
-            retweeters = get_retweets(tweet_id)
-            for user in retweeters:
+            for user in retweeters(tweet_id):
                 if user not in WHITELIST:
                     auth = OAuth1(CONSUMER_KEY, CONSUMER_SECRET,
                                   ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
