@@ -69,9 +69,9 @@ def get_retweets(tweetid):
     return handles
 
 
-def getTweets(usuarios):
+def last_tweet_id(user):
     api_url = "https://api.twitter.com/1.1/statuses/user_timeline.json"
-    payload = {'screen_name': usuarios, 'count': '1', 'trim_user': 't',
+    payload = {'screen_name': user, 'count': '1', 'trim_user': 't',
                'include_rts': 'false'}
     auth = OAuth1(GHOST_CONSUMER_KEY, GHOST_CONSUMER_SECRET,
                   GHOST_ACCESS_TOKEN_KEY, GHOST_ACCESS_TOKEN_SECRET)
@@ -99,7 +99,7 @@ def act_on_handle(api_url, auth, payload):
 def main():
     for cuenta in SHITLIST:
         try:
-            tweet = str(getTweets(cuenta))
+            tweet = str(last_tweet_id(cuenta))
             print "\nAnalizyng retweeters of", cuenta, "TweetID:", tweet
             print "https://twitter.com/" + cuenta + "/status/" + tweet
             HANDLES = get_retweets(tweet)
