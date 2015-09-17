@@ -62,7 +62,7 @@ def get_retweets(tweetid):
     except KeyboardInterrupt:
         sys.exit()
     except:
-        print "OK"
+        print("OK")
     retweetsObj = json.loads(r.content)
     for y in range(len(retweetsObj)):
         handles.append(retweetsObj[y]['user']['screen_name'])
@@ -83,7 +83,7 @@ def last_tweet_id(user):
 def act_on_handle(api_url, auth, payload):
     try:
         r = requests.post(api_url, stream=False, auth=auth, params=payload)
-        print r.headers['status'], payload
+        print(r.headers['status'], payload)
         if (r.headers['x-rate-limit-remaining'] and
                 r.headers['x-rate-limit-remaining'] == "0"):
             print('We reached rate limit for {url}'.format(url=api_url))
@@ -97,22 +97,26 @@ def act_on_handle(api_url, auth, payload):
 
 
 def main():
-    for cuenta in SHITLIST:
+    for shit_user in SHITLIST:
         try:
-            tweet = str(last_tweet_id(cuenta))
-            print "\nAnalizyng retweeters of", cuenta, "TweetID:", tweet
-            print "https://twitter.com/" + cuenta + "/status/" + tweet
-            HANDLES = get_retweets(tweet)
-            for user in HANDLES:
+            tweet_id = str(last_tweet_id(shit_user))
+            print("")
+            print("Analizing retweeters of {user} TweetID: {tweet_id}".format(
+                  user=shit_user, tweet_id=tweet_id))
+            print("https://twitter.com/{user}/status/{tweet_id}".format(
+                  user=shit_user, tweet_id=tweet_id))
+            retweeters = get_retweets(tweet_id)
+            for user in retweeters:
                 if user not in WHITELIST:
                     auth2 = OAuth1(CONSUMER_KEY, CONSUMER_SECRET,
                                    ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
-                    payload = "screen_name=" + user
+                    payload = "screen_name={user}".format(user=user)
                     # act_on_handle(BLOCK_URL, auth2, payload)
                     act_on_handle(MUTE_URL, auth2, payload)
                     sleep(1)
                 else:
-                    print "YOU FOLLOW ", user, "WHO RETWEETED", cuenta
+                    print("YOU FOLLOW {user} WHO RETWEETED {shit_user}".format(
+                          user=user, shit_user=shit_user))
                     sleep(40)
             sleep(60)
         except KeyboardInterrupt:
