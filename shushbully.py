@@ -108,11 +108,11 @@ def main():
             retweeters = get_retweets(tweet_id)
             for user in retweeters:
                 if user not in WHITELIST:
-                    auth2 = OAuth1(CONSUMER_KEY, CONSUMER_SECRET,
-                                   ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
+                    auth = OAuth1(CONSUMER_KEY, CONSUMER_SECRET,
+                                  ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
                     payload = "screen_name={user}".format(user=user)
-                    # act_on_handle(BLOCK_URL, auth2, payload)
-                    act_on_handle(MUTE_URL, auth2, payload)
+                    # act_on_handle(BLOCK_URL, auth, payload)
+                    act_on_handle(MUTE_URL, auth, payload)
                     sleep(1)
                 else:
                     print("YOU FOLLOW {user} WHO RETWEETED {shit_user}".format(
