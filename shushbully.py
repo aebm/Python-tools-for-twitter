@@ -5,14 +5,31 @@ import sys
 import csv
 from time import sleep
 
-whitelist = ['orvtech']
+whitelist = [
+    'orvtech',
+]
 
-shitlist = ['amaia_roja', 'anat5', 'carollafra', 'contraofensiva', 
-            'correoorinoco', 'forocandanga', 'guerrillaragua', 
-            'hectorodriguez', 'izarradeverdad', 'jorgerpsuv', 
-            'jrodriguezpsuv', 'lahojillaentv', 'laradiodelsur', 
-            'maperezpirela', 'nicolasmaduro', 'prisciliano_alf', 
-            'thaivama', 'yndiratorregros', 'PatriciaDorta40']
+shitlist = [
+    'amaia_roja',
+    'anat5',
+    'carollafra',
+    'contraofensiva',
+    'correoorinoco',
+    'forocandanga',
+    'guerrillaragua',
+    'hectorodriguez',
+    'izarradeverdad',
+    'jorgerpsuv',
+    'jrodriguezpsuv',
+    'lahojillaentv',
+    'laradiodelsur',
+    'maperezpirela',
+    'nicolasmaduro',
+    'prisciliano_alf',
+    'thaivama',
+    'yndiratorregros',
+    'PatriciaDorta40',
+]
 
 
 
